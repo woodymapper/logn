@@ -16,7 +16,8 @@ private string $Lastname;
 
     $this->login = $login = "a";
     $this->password = $password;
-
+        $this->FirstName = "";
+        $this->LastName = "";
 
 
 }
@@ -26,10 +27,10 @@ public function register(){
 
 $passwordhash = password_hash($this->password, PASSWORD_ARGON2I);
 $q = "INSERT INTO user VALUES (NULL, ?, ?, ?, ?)";
-$db = new mysqli('localhost', 'root', '', 'LoginForm2');
-$pq = $db-> perepare($q);
+$db = new mysqli('localhost', 'root', '', 'loginform2');
+$pq = $db-> prepare($q);
 $pq -> bind_param('ssss', $this->login, $passwordhash, $this->FirstName, $this->LastName);
-$pq -> execute();
+$pq -> execute(); var_dump($pq);
 }
 
 
