@@ -10,19 +10,19 @@ private string $Lastname;
 
 
 
+
+
+    public function __construct(string $Login, string $password){
+
+    $this->login = $login = "a";
+    $this->password = $password;
+
+
+
 }
 
-public function __construct(string $Login, string $password){
-
-$this->login = $login;
-$this->password = $password;
-
-
 
 }
-
-
-
 
 
 

@@ -1,7 +1,7 @@
 <?php
 
 
-require_once('logn/User.class.php');
+require_once('login.php');
 
 $user = new User('jkowalski','haslo');
 
