@@ -33,36 +33,36 @@ $pq -> bind_param('ssss', $this->login, $passwordhash, $this->FirstName, $this->
 $pq -> execute(); var_dump($pq);
 }
 
-
-}
 public function login(){
-$q = "SELECT * FROM user WHERE login = ?";
-$db = new mysqli('localhost', 'root', '', 'loginform2');
-$pq = $db-> prepare($q);
-$pq -> bind_param('s', $this->login);
-$pq -> execute(); 
-$result = $pq->get_result();
-if(password_verify($this->password, $passwordhash)){
-$this->id = $row['$id'];
-$this->FirstName = $row['FirstName'];
-$this->LastName = $row['LastName'];
-echo"Dobry Login";
-
+    $q = "SELECT * FROM user WHERE login = ?";
+    $db = new mysqli('localhost', 'root', '', 'loginform2');
+    $pq = $db-> prepare($q);
+    $pq -> bind_param('s', $this->login);
+    $pq -> execute(); 
+    $result = $pq->get_result();
+    if(password_verify($this->password, $passwordhash)){
+    $this->id = $row['$id'];
+    $this->FirstName = $row['FirstName'];
+    $this->LastName = $row['LastName'];
+    echo"Dobry Login";
+    
+    }
+    else{
+        echo"Zły Login";
+    }
+    
+    if($result->num_rows == 1){
+    
+        $row = $result->fetch_assoc();
+    
+    }
+    else{
+        echo"Brak Loginu";
+        return ;
+    }
+    }
+    
+    
 }
-else{
-    echo"Zły Login";
-}
-
-if($result->num_rows == 1){
-
-    $row = $result->fetch_assoc();
-
-}
-else{
-    echo"Brak Loginu";
-    return ;
-}
-}
-
 
 ?>
