@@ -22,6 +22,17 @@ private string $Lastname;
 }
 
 
+public function register(){
+
+$passwordhash = password_hash($this->password, PASSWORD_ARGON2I);
+$q = "INSERT INTO user VALUES (NULL, ?, ?, ?, ?)";
+$db = new mysqli('localhost', 'root', '', 'LoginForm2');
+$pq = $db-> perepare($q);
+$pq -> bind_param('ssss', $this->login, $passwordhash, $this->FirstName, $this->LastName);
+$pq -> execute();
+}
+
+
 }
 
 
