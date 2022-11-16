@@ -1,11 +1,13 @@
 <?php
-
-
 require_once('login.php');
 
-$user = new User('jkowalski','haslo');
-$user->login();
-echo '<pre>';
-var_dump($user);
+$user = new User('jkowalski', 'tajneHasło');
+
+
+if($user->login()) {
+    echo "Zalogowano poprawnie";
+} else {
+    echo "Błędny login lub hasło";
+}
 
 ?>
