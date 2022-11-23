@@ -6,7 +6,7 @@ if(isset($_REQUEST['login']) && isset($_REQUEST['password'])) {
     $user = new User($_REQUEST['login'], $_REQUEST['password']);
     if($user->register()) {
         $v = array(
-            'message' => "Registracja poprawna:  "
+            'message' => "Registracja poprawna"
         );
         $twig->display('message.html.twig', $v);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     } else {
