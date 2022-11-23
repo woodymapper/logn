@@ -10,7 +10,7 @@ if(isset($_REQUEST['login']) && isset($_REQUEST['password'])) {
         $v = array(
             'message' => "Zalogowano poprawnie użytkownika: ".$user->getName(),
         );
-        $twig->display('message.html.twig', $v);
+        $twig->display('message.html.twig', $v);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     } else {
         //echo "Błędny login lub hasło";
         $twig->display('message.html.twig', 
