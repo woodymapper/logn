@@ -76,5 +76,30 @@ Route::add('/logout', function() {
                                 ['message' => "Wylogowano poprawnie"]);
 });
 
+Route::add('/profile', function(){
+
+global $twig;
+$user = $_SESSION['user'];
+
+$fullName = $user->getName();
+$fullName = explode("", $fullName);
+$v = array('user'=>$user, 'firstName'=> $fullName[0], 'lastName'=> $fullName[1]);
+$twig->display('profile.html.twig', $v);
+
+});
+
+Route::add('/profile', function(){
+global $twig;
+if(isset($_REQUEST['firstName']) && isset($_REQUEST['lastName'])) {
+    //jeżeli już podano dane do logowania
+   $user = $_SESSION['user'];
+   $user->setFirstName($_REQUEST['firstName']);
+   $user->setLastName($_REQUEST['lastName']);
+
+
+}});
+
+
+
 Route::run('/logn')
 ?>
