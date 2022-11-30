@@ -87,7 +87,7 @@ $v = array('user'=>$user, 'firstName'=> $fullName[0], 'lastName'=> $fullName[1])
 $twig->display('profile.html.twig', $v);
 
 });
-
+/*
 Route::add('/profile', function(){
 global $twig;
 if(isset($_REQUEST['firstName']) && isset($_REQUEST['lastName'])) {
@@ -99,7 +99,7 @@ if(isset($_REQUEST['firstName']) && isset($_REQUEST['lastName'])) {
     $twig->display('message.html.twig',['message'=>"Zarejestrowano poprawnie"]);
 
 }});
-
+*/
 
 
 Route::run('/logn')
