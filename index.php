@@ -95,7 +95,8 @@ if(isset($_REQUEST['firstName']) && isset($_REQUEST['lastName'])) {
    $user = $_SESSION['user'];
    $user->setFirstName($_REQUEST['firstName']);
    $user->setLastName($_REQUEST['lastName']);
-
+    $user->save();
+    $twig->display('message.html.twig',['message'=>"Zarejestrowano poprawnie"]);
 
 }});
 
