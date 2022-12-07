@@ -1,9 +1,11 @@
 <?php
-use  Steampixel\Route;
+
+use Steampixel\Route;
+
 require_once('config.php');
 require_once('login.php');
 session_start();
-Route::add('/', function(){ 
+Route::add('/', function() {
     global $twig;
     $v = array();
     if(isset($_SESSION['auth']))
@@ -11,64 +13,68 @@ Route::add('/', function(){
             //jesteśmy zalogowani
             $user = $_SESSION['user'];
             $v['user'] = $user;
-
+            
         }
     $twig->display('home.html.twig', $v);
-
+    //echo "<pre>";
+    //var_dump($_SESSION);
 });
 
-Route::add('/login', function(){ 
-    //echo "Strona Logowania";
+Route::add('/login', function() { 
+    global $twig;
+    $twig->display('login.html.twig');
+});
+
+Route::add('/login', function() {
     global $twig;
     if(isset($_REQUEST['login']) && isset($_REQUEST['password'])) {
-        //jeżeli już podano dane do logowania
-        $_SESSION['auth'] = true;
-            $_SESSION['user'] = $user;
         $user = new User($_REQUEST['login'], $_REQUEST['password']);
         if($user->login()) {
-            //echo "Zalogowano poprawnie użytkownika: ".$user->getName();
+            $_SESSION['auth'] = true;
+            $_SESSION['user'] = $user;
             $v = array(
                 'message' => "Zalogowano poprawnie użytkownika: ".$user->getName(),
             );
-            $twig->display('message.html.twig', $v);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+            $twig->display('message.html.twig', $v);
         } else {
-            //echo "Błędny login lub hasło";
             $twig->display('login.html.twig', 
                                 ['message' => "Błędny login lub hasło"]);
         }
     } else {
-        //jeśli jeszcze nie podano danych
-        //wyświetl formularz logowania
-        $twig->display('login.html.twig');
+        die("Nie otrzymano danych");
     }
+}, 'post');
 
-
-
-
-    'post';
+Route::add('/register', function() {
+    global $twig;
+    $twig->display('register.html.twig');
 });
-Route::add('/register', function(){ 
-   // echo "Strona Rejestracji";
+Route::add('/register', function() {
     global $twig;
     if(isset($_REQUEST['login']) && isset($_REQUEST['password'])) {
-        require_once('login.php');
+        if(empty($_REQUEST['login']) || empty($_REQUEST['password'])
+            || empty($_REQUEST['firstName']) || empty($_REQUEST['lastName'])) {
+                //podano pusty string jako jedną z wymaganych wartości
+                $twig->display('register.html.twig', 
+                                ['message' => "Nie podano wymaganej wartości"]);
+                exit();
+            }
         $user = new User($_REQUEST['login'], $_REQUEST['password']);
+        $user->setFirstName($_REQUEST['firstName']);
+        $user->setLastName($_REQUEST['lastName']);
         if($user->register()) {
-            $v = array(
-                'message' => "Registracja poprawna"
-            );
-            $twig->display('message.html.twig', $v);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+            //echo "Zarejestrowano poprawnie";
+            $twig->display('message.html.twig', 
+                                ['message' => "Zarejestrowano poprawnie"]);
         } else {
-            $v = array(
-                'register' => "Błąd "
-            );
-            $twig->display('register.html.twig', $v);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+            //echo "Błąd rejestracji użytkownika";
+            $twig->display('register.html.twig', 
+                                ['message' => "Błąd rejestracji użytkownika"]);
         }
+    } else {
+        die("Nie otrzymano danych");
     }
-
-});
-
-
+}, 'post');
 Route::add('/logout', function() {
     global $twig;
     session_destroy();
@@ -76,31 +82,20 @@ Route::add('/logout', function() {
                                 ['message' => "Wylogowano poprawnie"]);
 });
 
-Route::add('/profile', function(){
 
+/*Route::add('/profie',funcion(){
 global $twig;
-$user = $_SESSION['user'];
-
-$fullName = $user->getName();
-$fullName = explode("", $fullName);
-$v = array('user'=>$user, 'firstName'=> $fullName[0], 'lastName'=> $fullName[1]);
-$twig->display('profile.html.twig', $v);
-
-});
-/*
-Route::add('/profile', function(){
-global $twig;
-if(isset($_REQUEST['firstName']) && isset($_REQUEST['lastName'])) {
-    //jeżeli już podano dane do logowania
-   $user = $_SESSION['user'];
-   $user->setFirstName($_REQUEST['firstName']);
-   $user->setLastName($_REQUEST['lastName']);
+if(isset($_REQUEST['firstName']) && isset($_REQUEST['lastName'])){
+    $user = $_SESSION['user'];
+    $user->setFirstName($_REQUEST['firstName']);
+    $user->setFirstName($_REQUEST['lastName']);
     $user->save();
-    $twig->display('message.html.twig',['message'=>"Zarejestrowano poprawnie"]);
+    $twig->display('message.html.twig',)
+    
+}
+});*/
 
-}});
-*/
 
 
-Route::run('/logn')
+Route::run('/logn');
 ?>
