@@ -3,8 +3,10 @@
 use Steampixel\Route;
 
 require_once('config.php');
-require_once('login.php');
+require_once('class/User.class.php');
+
 session_start();
+
 Route::add('/', function() {
     global $twig;
     $v = array();
@@ -30,6 +32,7 @@ Route::add('/login', function() {
     if(isset($_REQUEST['login']) && isset($_REQUEST['password'])) {
         $user = new User($_REQUEST['login'], $_REQUEST['password']);
         if($user->login()) {
+            // tu jest już poprawnie zalogowany użytkownik
             $_SESSION['auth'] = true;
             $_SESSION['user'] = $user;
             $v = array(
@@ -75,6 +78,7 @@ Route::add('/register', function() {
         die("Nie otrzymano danych");
     }
 }, 'post');
+
 Route::add('/logout', function() {
     global $twig;
     session_destroy();
@@ -82,20 +86,29 @@ Route::add('/logout', function() {
                                 ['message' => "Wylogowano poprawnie"]);
 });
 
-
-/*Route::add('/profie',funcion(){
-global $twig;
-if(isset($_REQUEST['firstName']) && isset($_REQUEST['lastName'])){
+Route::add('/profile', function() {
+    global $twig;
     $user = $_SESSION['user'];
-    $user->setFirstName($_REQUEST['firstName']);
-    $user->setFirstName($_REQUEST['lastName']);
-    $user->save();
-    $twig->display('message.html.twig',)
-    
-}
-});*/
-
-
+    //pobieramy imię i nazwisko rozdzielone spacją
+    $fullName = $user->getName();
+    $fullName = explode(" ", $fullName); // "Imię nazwisko" => array ("Imię", "Nazwisko");
+    $v = array( 'user'      => $user,
+                'firstName' => $fullName[0],
+                'lastName'  => $fullName[1],
+            );
+    $twig->display('profile.html.twig', $v);
+});
+Route::add('/profile', function() {
+    global $twig;
+    if(isset($_REQUEST['firstName']) && isset($_REQUEST['lastName'])) {
+        $user = $_SESSION['user'];
+        $user->setFirstName($_REQUEST['firstName']);
+        $user->setLastName($_REQUEST['lastName']);
+        $user->save();
+        $twig->display('message.html.twig', 
+                                ['message' => "Zapisano zmiany w profilu"]);
+    }
+}, "post");
 
 Route::run('/logn');
 ?>

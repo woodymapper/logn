@@ -1,51 +1,24 @@
 <?php
-class User {
-    private int $id;
-    private string $login;
-    private string $password;
-    private string $firstName;
-    private string $lastName;
+require_once('config.php');
 
-    public function __construct(string $login, string $password) {
-        $this->login = $login;
-        $this->password = $password;
-        $this->firstName = "";
-        $this->lastName = "";
+if(isset($_REQUEST['login']) && isset($_REQUEST['password'])) {
+    //jeżeli już podano dane do logowania
+    
+    $user = new User($_REQUEST['login'], $_REQUEST['password']);
+    if($user->login()) {
+        //echo "Zalogowano poprawnie użytkownika: ".$user->getName();
+        $v = array(
+            'message' => "Zalogowano poprawnie użytkownika: ".$user->getName(),
+        );
+        $twig->display('message.html.twig', $v);
+    } else {
+        //echo "Błędny login lub hasło";
+        $twig->display('message.html.twig', 
+                            ['message' => "Błędny login lub hasło"]);
     }
-
-    public function register() : bool {
-        $passwordHash = password_hash($this->password, PASSWORD_ARGON2I);
-        $query = "INSERT INTO user VALUES (NULL, ?, ?, ?, ?)";
-        $db = new mysqli('localhost', 'root', '', 'loginform2');
-        $preparedQuery = $db->prepare($query); 
-        $preparedQuery->bind_param('ssss', $this->login, $passwordHash, 
-                                            $this->firstName, $this->lastName);
-        $result = $preparedQuery->execute();
-        return $result;
-    }
-
-    public function login() : bool {
-        $query = "SELECT * FROM user WHERE login = ? LIMIT 1";
-        $db = new mysqli('localhost', 'root', '', 'loginform2');
-        $preparedQuery = $db->prepare($query); 
-        $preparedQuery->bind_param('s', $this->login);
-        $preparedQuery->execute();
-        $result = $preparedQuery->get_result();
-        if($result->num_rows == 1) {
-            $row = $result->fetch_assoc();
-            $passwordHash = $row['password'];
-            if(password_verify($this->password, $passwordHash)) {
-                $this->id = $row['id'];
-                $this->firstName = $row['firstName'];
-                $this->lastName = $row['lastName'];
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
+} else {
+    //jeśli jeszcze nie podano danych
+    //wyświetl formularz logowania
+    $twig->display('login.html.twig');
 }
-?>
+?>   

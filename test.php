@@ -2,9 +2,8 @@
 require_once('config.php');
 
 $v = array(
-    'testVariable'=>"Wartość Testu",
+    'testVariable' => "Wartość testowa",
 );
-
-$twig->display('test.html.twig', $v );
+$twig->display('test.html.twig', $v);
 
 ?>
